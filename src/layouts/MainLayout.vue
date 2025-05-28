@@ -21,6 +21,12 @@
           <q-item-section>Dashboard</q-item-section>
         </q-item>
         <!-- Adicione outros links internos aqui -->
+        <q-item clickable v-ripple to="/habits">
+          <q-item-section avatar>
+            <q-icon name="checklist" />
+          </q-item-section>
+          <q-item-section>Hábitos</q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
