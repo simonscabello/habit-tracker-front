@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import axios from 'axios'
+import { API_ENDPOINTS } from 'src/config/api'
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('token') || '')
@@ -19,7 +20,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function fetchUser() {
     try {
-      const response = await axios.get('http://localhost:8000/me', {
+      const response = await axios.get(API_ENDPOINTS.me, {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },

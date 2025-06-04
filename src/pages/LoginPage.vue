@@ -39,6 +39,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import { useAuthStore } from 'src/stores/auth'
+import { API_ENDPOINTS } from 'src/config/api'
 
 const email = ref('')
 const password = ref('')
@@ -49,7 +50,7 @@ const auth = useAuthStore()
 async function login() {
   error.value = ''
   try {
-    const response = await axios.post('http://localhost:8000/login', {
+    const response = await axios.post(API_ENDPOINTS.login, {
       email: email.value,
       password: password.value,
     })
