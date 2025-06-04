@@ -35,12 +35,14 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import { API_ENDPOINTS } from 'src/config/api'
+import { useAuthStore } from 'src/stores/auth'
 
 const name = ref('')
 const email = ref('')
 const password = ref('')
 const error = ref('')
 const router = useRouter()
+const auth = useAuthStore()
 
 async function register() {
   error.value = ''
@@ -58,15 +60,8 @@ async function register() {
       password: password.value,
     })
 
-    const token = loginResponse.data.token
-    localStorage.setItem('token', token)
-
-    // Configurar o token no header do axios para a próxima requisição
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-
-    // Buscar dados do usuário
-    const userResponse = await axios.get(API_ENDPOINTS.me)
-    localStorage.setItem('user', JSON.stringify(userResponse.data))
+    auth.setToken(loginResponse.data.token)
+    await auth.fetchUser()
 
     router.push('/dashboard')
   } catch (err) {
