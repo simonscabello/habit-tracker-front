@@ -45,17 +45,33 @@ const router = useRouter()
 async function register() {
   error.value = ''
   try {
-    const response = await axios.post(API_ENDPOINTS.register, {
+    // Primeiro faz o registro
+    await axios.post(API_ENDPOINTS.register, {
       name: name.value,
       email: email.value,
       password: password.value,
     })
 
-    const token = response.data.token
+    // Após o registro, faz o login
+    const loginResponse = await axios.post(API_ENDPOINTS.login, {
+      email: email.value,
+      password: password.value,
+    })
+
+    const token = loginResponse.data.token
     localStorage.setItem('token', token)
+
+    // Configurar o token no header do axios para a próxima requisição
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
+    // Buscar dados do usuário
+    const userResponse = await axios.get(API_ENDPOINTS.me)
+    localStorage.setItem('user', JSON.stringify(userResponse.data))
+
     router.push('/dashboard')
-  } catch (error) {
+  } catch (err) {
     error.value = 'Erro ao registrar. Tente novamente.'
+    console.error('Erro:', err)
   }
 }
 
